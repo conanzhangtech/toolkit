@@ -1,0 +1,26 @@
+Write-Output "Certificate Generator - © @conanzhangtech"
+$years = Read-Host "Specify the certificate validity period (in years)"
+$certInputName = Read-Host "Enter the certificate common name (e.g., fqdn)"
+$saveFolder = Read-Host "Enter the destination folder path for the PFX file (e.g., C:\folder1)"
+$pfxPassInput = Read-Host "Enter the password to protect the PFX file"
+$certName = "CN=$certInputName"
+$pfxPassword = ConvertTo-SecureString -String $pfxPassInput -Force -AsPlainText
+$pfxPath = Join-Path -Path $saveFolder -ChildPath "$certInputName.pfx"
+$notAfter = (Get-Date).AddYears([int]$years)
+
+$cert = New-SelfSignedCertificate `
+    -Subject $certName `
+    -CertStoreLocation "Cert:\CurrentUser\My" `
+    -NotAfter $notAfter `
+    -KeyExportPolicy Exportable `
+    -KeySpec Signature `
+    -KeyLength 2048 `
+    -HashAlgorithm sha256 `
+    -Provider "Microsoft Enhanced RSA and AES Cryptographic Provider"
+
+Export-PfxCertificate `
+    -Cert $cert `
+    -FilePath $pfxPath `
+    -Password $pfxPassword
+
+Write-Output "Certificate successfully generated and exported to: $pfxPath"
