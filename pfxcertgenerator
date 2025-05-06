@@ -1,10 +1,9 @@
 Write-Output ".pfx Certificate Generator - © @conanzhangtech"
 $years = Read-Host "Specify the certificate validity period (in years)"
-$certInputName = Read-Host "Enter the certificate common name (e.g., fqdn)"
+$certInputName = Read-Host "Enter the certificate common name (e.g., FQDN.local)"
 $saveFolder = Read-Host "Enter the destination folder path for the PFX file (e.g., C:\folder1)"
-$pfxPassInput = Read-Host "Enter the password to protect the PFX file"
+$pfxPassword = Read-Host "Enter the password to protect the PFX file" -AsSecureString
 $certName = "CN=$certInputName"
-$pfxPassword = ConvertTo-SecureString -String $pfxPassInput -Force -AsPlainText
 $pfxPath = Join-Path -Path $saveFolder -ChildPath "$certInputName.pfx"
 $notAfter = (Get-Date).AddYears([int]$years)
 
@@ -24,3 +23,4 @@ Export-PfxCertificate `
     -Password $pfxPassword
 
 Write-Output "Certificate successfully generated and exported to: $pfxPath"
+
