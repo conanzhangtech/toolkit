@@ -1,4 +1,4 @@
-Write-Output "Certificate Generator - © @conanzhangtech"
+Write-Output ".pfx Certificate Generator - © @conanzhangtech"
 $years = Read-Host "Specify the certificate validity period (in years)"
 $certInputName = Read-Host "Enter the certificate common name (e.g., fqdn)"
 $saveFolder = Read-Host "Enter the destination folder path for the PFX file (e.g., C:\folder1)"
